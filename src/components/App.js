@@ -6,14 +6,31 @@ class App extends Component {
   // Set props and state below.
   // You should set state for vehicles (empty array), value (empty string), pilot (empty) string.
   // Enter your code below:
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      vehicles: [],
+      values: '',
+      pilot: '',
+    };
+
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this)
+
+  }
 
 
-  
+
   // FORM: HANDLE INPUT CHANGES
   // handleNameChange below:
   // See form lesson for details.
   // Enter your code below:
-
+  handleNameChange(event) {
+    this.setState({
+      value: event.target.value
+    });
+  }
 
 
   //  FORM: SUBMIT METHOD
@@ -22,6 +39,13 @@ class App extends Component {
   // Once the form is sumbited, two things need to happen: set the state of pilot to the input value.
   // Then, set the value of the input back to an empty string.
   // Enter your code below:
+  handleSubmit(event) {
+    event.preventDefault();
+    this.setState({
+      pilot: this.state.value,
+      value: ''
+    })
+  }
 
 
   // LIFECYCLE
@@ -31,6 +55,18 @@ class App extends Component {
   // In your response look for 'results'. It should return this array.
   // You will want to use this array when you set the state of 'vehicles'. You will need this data in your render.
   // Enter your code below:
+
+  componentDidMount() {
+    fetch('https://swapi.co/api/vehicles/')
+    .then(r => r.json()
+    .then((data) => {
+      let vehiclesArray = data.results;
+      this.setState({vehicles: vehiclesArray})
+    })
+  )
+}
+
+
 
 
   // RENDER
@@ -46,6 +82,9 @@ class App extends Component {
     Store vehicles state in a variable.
     Map over this variable to access the values needed to render.
     */
+    let vehicleList = this.state.vehicles
+    let vehicles = vehicleList.map((vehicle) => {
+
     return (
       <div className="App">
       {/*
@@ -55,8 +94,15 @@ class App extends Component {
         */}
         </div>
       )
+      })
+      return(
+        <div>
+          {vehicles}
+        </div>
+        )
     }
   }
+
 
 
 export default App;
